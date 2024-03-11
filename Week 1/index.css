@@ -1,0 +1,10 @@
+button {
+    background: #354CA1;
+    color: white;
+}
+
+button:hover {
+      background:#59C3C3;
+      transition: 0.7s;
+  
+  }
