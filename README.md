@@ -1,5 +1,14 @@
 # itom6219
 
+## Creating an account on GitHub
+Navigate to https://github.com/.
+
+Click **Sign up**.
+Follow the prompts to create your personal account.
+During sign up, you'll be asked to verify your email address. Without a verified email address, you won't be able to complete some basic GitHub tasks, such as creating a repository.
+
+
+
 ## Installing GitHub Desktop
 You can install GitHub Desktop on supported Windows or macOS operating systems.
 
