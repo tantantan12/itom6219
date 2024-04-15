@@ -144,7 +144,7 @@ for tweet in filtered_tweets:
 edge_df=pd.DataFrame(edge)
 ```
 
-### 4.5 My network graph does not look pretty. What are different ways of displaying the network?
+### 4.5 My network graph does not look pretty. What are the different ways of displaying the network?
 
 Instead of using ```pos = nx.circular_layout(G)```, youo can use ```pos = nx.kamada_kawai_layout(G)``` to better display the network.
 
@@ -173,3 +173,6 @@ The Twitter profile page for "Ellahorantommo" is https://twitter.com/ellahoranto
 
 ### 5.1 Do we need to run the AB test using Netlify?
 **NO**. For problem 5, we only need to design the AB test and show the alternative version in a branch of our GitHub repo. You do not need to run it and you do not need to collect data for it.
+
+### 5.2 Do I need to create a branch to show my proposed experimental condition? Does this branch need to be different from the branch for Q1? 
+Yes, you need to create the branch to show your proposed experimental condition. Since Q1 focuses on prompt improvement, you can focus on something else (user interface) for Q5. However, you can also build this experiment based on the improved prompt and submit the same branch.
