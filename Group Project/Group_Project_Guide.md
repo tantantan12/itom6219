@@ -1,5 +1,11 @@
 # Q&A for the Group Project
 
+## Submission Requirement
+
+### How to indicate small teams for this homework?
+- Please submit the group project individually. 
+- Please include your team members' names either in response to the first question or in the comment section of Canvas. 
+
 ## Problem 1
 
 ### 1.1 How can I change my prompt such that my output can be formatted in bullet points?
