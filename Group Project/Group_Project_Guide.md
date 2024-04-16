@@ -169,6 +169,13 @@ In the class practice, we included external attributes (users_info.csv).
 
 The Twitter profile page for "Ellahorantommo" is https://twitter.com/ellahorantommo.
 
+### 4.9 How do I include node names as additional node features?
+When you choose influencers, you assemble a dataframe with each row representing a node and each column representing a centrality. You will also need to include the node name as one column so that you can tell which node is more central. The following code extracted from HW4 could help you. 
+```python
+for node in G.nodes():
+    G.nodes[node]['name'] = node
+```
+
 ## 5 Problem 5
 
 ### 5.1 Do we need to run the AB test using Netlify?
