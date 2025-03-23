@@ -1,6 +1,9 @@
+
 import requests
 import pandas as pd
+import time
 from .auth import bearer_oauth
+from .user import user_info
 
 def user_info(usernames):
     usernames_str = ",".join(usernames)
@@ -15,17 +18,42 @@ def user_info(usernames):
     return pd.json_normalize(data)
 
 
-def user_tweets(usernames, max_results=100):
+
+
+def build_params(max_results=100, exclude_replies=False, exclude_retweets=False):
+    # Build tweet.fields
+    tweet_fields = ",".join([
+        "id", "text", "created_at", "public_metrics", "conversation_id",
+        "in_reply_to_user_id", "lang", "source"
+    ])
+
+    # Build exclude parameter
+    exclude = []
+    if exclude_replies:
+        exclude.append("replies")
+    if exclude_retweets:
+        exclude.append("retweets")
+
+    params = {
+        "tweet.fields": tweet_fields,
+        "max_results": max_results
+    }
+
+    if exclude:
+        params["exclude"] = ",".join(exclude)
+
+    return params
+
+
+def user_tweets(usernames, max_results=100, exclude_replies=False, exclude_retweets=False):
     info_df = user_info(usernames)
     all_tweets = []
+
+    params = build_params(max_results, exclude_replies, exclude_retweets)
 
     for _, row in info_df.iterrows():
         user_id = row["id"]
         url = f"https://api.twitter.com/2/users/{user_id}/tweets"
-        params = {
-            "tweet.fields": "created_at,public_metrics",
-            "max_results": max_results  # Twitter allows up to 100
-        }
         response = requests.get(url, auth=bearer_oauth, params=params)
 
         if response.status_code != 200:
@@ -39,10 +67,8 @@ def user_tweets(usernames, max_results=100):
 
     return pd.concat(all_tweets, ignore_index=True) if all_tweets else pd.DataFrame()
 
-import time
-from .user import user_info     # assuming this lives in the same package
 
-def user_tweets_all(usernames, max_total=1000):
+def user_tweets_all(usernames, max_total=1000, exclude_replies=False, exclude_retweets=False):
     info_df = user_info(usernames)
     all_tweets = []
 
@@ -51,15 +77,14 @@ def user_tweets_all(usernames, max_total=1000):
         username = row["username"]
         url = f"https://api.twitter.com/2/users/{user_id}/tweets"
 
-        params = {
-            "tweet.fields": "created_at,public_metrics",
-            "max_results": 100,  # max allowed per request
-        }
-
         tweet_count = 0
         pagination_token = None
 
         while tweet_count < max_total:
+            remaining = max_total - tweet_count
+            batch_size = min(100, remaining)
+            params = build_params(batch_size, exclude_replies, exclude_retweets)
+
             if pagination_token:
                 params["pagination_token"] = pagination_token
 
@@ -74,7 +99,7 @@ def user_tweets_all(usernames, max_total=1000):
             meta = response_data.get("meta", {})
 
             if not tweets:
-                break  # No more tweets available
+                break
 
             tweet_df = pd.json_normalize(tweets)
             tweet_df["username"] = username
@@ -84,9 +109,8 @@ def user_tweets_all(usernames, max_total=1000):
 
             pagination_token = meta.get("next_token")
             if not pagination_token:
-                break  # No more pages
+                break
 
-            time.sleep(1)  # Optional: avoid hitting rate limits
+            time.sleep(1)
 
     return pd.concat(all_tweets, ignore_index=True) if all_tweets else pd.DataFrame()
-
