@@ -3,8 +3,7 @@ import requests
 import pandas as pd
 import time
 from .auth import bearer_oauth
-from .user import user_info
-
+ 
 def user_info(usernames):
     usernames_str = ",".join(usernames)
     user_fields = "user.fields=description,created_at,verified,public_metrics,id"
