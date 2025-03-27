@@ -19,7 +19,7 @@ def user_info(usernames):
 
 
 
-def build_params(max_results=100, exclude_replies=False, exclude_retweets=False):
+def build_params(max_results=10, exclude_replies=False, exclude_retweets=False):
     # Build tweet.fields
     tweet_fields = ",".join([
         "id", "text", "created_at", "public_metrics", "conversation_id",
@@ -44,7 +44,7 @@ def build_params(max_results=100, exclude_replies=False, exclude_retweets=False)
     return params
 
 
-def user_tweets(usernames, max_results=100, exclude_replies=False, exclude_retweets=False):
+def user_tweets(usernames, max_results=10, exclude_replies=False, exclude_retweets=False):
     info_df = user_info(usernames)
     all_tweets = []
 
